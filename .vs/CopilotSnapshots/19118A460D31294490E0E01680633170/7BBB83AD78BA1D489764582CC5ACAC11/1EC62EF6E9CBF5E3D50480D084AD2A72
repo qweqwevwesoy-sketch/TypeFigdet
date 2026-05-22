@@ -1,0 +1,25 @@
+﻿<Window x:Class="TypeFigdet.ColorPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pick Color" Height="250" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Text="Select a Color" FontSize="14" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <TextBlock Text="Preset Colors:" FontSize="12" Margin="0,0,0,10"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+            <Button x:Name="BlackBtn" Width="30" Height="30" Background="Black" Margin="0,0,5,0" Click="ColorButton_Click"/>
+            <Button x:Name="RedBtn" Width="30" Height="30" Background="Red" Margin="0,0,5,0" Click="ColorButton_Click"/>
+            <Button x:Name="GreenBtn" Width="30" Height="30" Background="Green" Margin="0,0,5,0" Click="ColorButton_Click"/>
+            <Button x:Name="BlueBtn" Width="30" Height="30" Background="Blue" Margin="0,0,5,0" Click="ColorButton_Click"/>
+            <Button x:Name="WhiteBtn" Width="30" Height="30" Background="White" BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Click="ColorButton_Click"/>
+            <Button x:Name="YellowBtn" Width="30" Height="30" Background="Yellow" Margin="0,0,5,0" Click="ColorButton_Click"/>
+        </StackPanel>
+
+        <TextBlock x:Name="SelectedColorLabel" Text="Selected: Black" FontSize="12" Margin="0,0,0,15"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" Width="70" Height="30" Margin="0,0,5,0" Click="OK_Click" Background="#007ACC" Foreground="White"/>
+            <Button Content="Cancel" Width="70" Height="30" Click="Cancel_Click" Background="#F44747" Foreground="White"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -1,0 +1,293 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Input;
+using System.Windows.Threading;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for SettingsWindow.xaml
+    /// </summary>
+    public partial class SettingsWindow : Window
+    {
+        private MainWindow _mainWindow;
+        private ModifierKeys _currentModifier = ModifierKeys.Control | ModifierKeys.Alt;
+        private Key _currentKey = Key.T;
+        private bool _isRecording = false;
+
+        public SettingsWindow(MainWindow mainWindow)
+        {
+            InitializeComponent();
+            _mainWindow = mainWindow;
+            InitializeSettings();
+
+            Loaded += (s, e) =>
+            {
+                // Register this window with the app
+                if (Application.Current is App app)
+                {
+                    app.RegisterWindow(this);
+                }
+            };
+            Closed += (s, e) =>
+            {
+                // Unregister when closed
+                if (Application.Current is App app)
+                {
+                    app.UnregisterWindow(this);
+                }
+            };
+        }
+
+        private void InitializeSettings()
+        {
+            // Populate font families
+            foreach (var family in Fonts.SystemFontFamilies)
+            {
+                FontFamilyComboBox.Items.Add(family.Source);
+            }
+            FontFamilyComboBox.SelectedItem = _mainWindow.InputTextBox.FontFamily.Source;
+            FontFamilyComboBox.SelectionChanged += FontFamilyComboBox_SelectionChanged;
+
+            // Font size
+            FontSizeSlider.Value = _mainWindow.InputTextBox.FontSize;
+            FontSizeSlider.ValueChanged += FontSizeSlider_ValueChanged;
+            FontSizeLabel.Text = $"{(int)FontSizeSlider.Value} pt";
+
+            // Font color
+            var fontColor = (_mainWindow.InputTextBox.Foreground as SolidColorBrush)?.Color ?? Colors.Black;
+            ColorLabel.Text = fontColor.ToString();
+            ColorLabel.Background = new SolidColorBrush(fontColor);
+
+            // Text alignment
+            TextAlignmentComboBox.SelectedValuePath = "Tag";
+            TextAlignmentComboBox.SelectedValue = _mainWindow.InputTextBox.TextAlignment.ToString();
+            TextAlignmentComboBox.SelectionChanged += TextAlignmentComboBox_SelectionChanged;
+
+            // Window size
+            WindowWidthSlider.Value = _mainWindow.Width;
+            WindowWidthSlider.ValueChanged += WindowWidthSlider_ValueChanged;
+            WindowWidthLabel.Text = $"{(int)WindowWidthSlider.Value}";
+
+            WindowHeightSlider.Value = _mainWindow.Height;
+            WindowHeightSlider.ValueChanged += WindowHeightSlider_ValueChanged;
+            WindowHeightLabel.Text = $"{(int)WindowHeightSlider.Value}";
+
+            // Background color
+            var bgColor = (_mainWindow.Background as SolidColorBrush)?.Color ?? Colors.White;
+            BackgroundColorLabel.Text = bgColor.ToString();
+            BackgroundColorLabel.Background = new SolidColorBrush(bgColor);
+
+            // Opacity
+            OpacitySlider.Value = _mainWindow.Opacity;
+            OpacitySlider.ValueChanged += OpacitySlider_ValueChanged;
+            OpacityLabel.Text = $"{(int)(OpacitySlider.Value * 100)}%";
+
+            // Stats
+            ShowStatsCheckBox.IsChecked = _mainWindow.ShowStats;
+            ShowStatsCheckBox.Checked += (s, e) => { _mainWindow.ShowStats = true; _mainWindow.StatsTextBlock.Visibility = Visibility.Visible; };
+            ShowStatsCheckBox.Unchecked += (s, e) => { _mainWindow.ShowStats = false; _mainWindow.StatsTextBlock.Visibility = Visibility.Collapsed; };
+        }
+
+        private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (FontFamilyComboBox.SelectedItem != null)
+            {
+                _mainWindow.InputTextBox.FontFamily = new FontFamily(FontFamilyComboBox.SelectedItem.ToString());
+            }
+        }
+
+        private void FontSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.InputTextBox.FontSize = e.NewValue;
+            FontSizeLabel.Text = $"{(int)e.NewValue} pt";
+        }
+
+        private void TextAlignmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TextAlignmentComboBox.SelectedValue is string alignment)
+            {
+                if (System.Enum.TryParse<TextAlignment>(alignment, out var textAlignment))
+                {
+                    _mainWindow.InputTextBox.TextAlignment = textAlignment;
+                }
+            }
+        }
+
+        private void ColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var colorPicker = new ColorPickerWindow();
+            if (colorPicker.ShowDialog() == true)
+            {
+                var selectedColor = colorPicker.SelectedColor;
+                _mainWindow.InputTextBox.Foreground = new SolidColorBrush(selectedColor);
+                ColorLabel.Text = selectedColor.ToString();
+                ColorLabel.Background = new SolidColorBrush(selectedColor);
+            }
+        }
+
+        private void WindowWidthSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.Width = e.NewValue;
+            WindowWidthLabel.Text = $"{(int)e.NewValue}";
+        }
+
+        private void WindowHeightSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.Height = e.NewValue;
+            WindowHeightLabel.Text = $"{(int)e.NewValue}";
+        }
+
+        private void BackgroundColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var colorPicker = new ColorPickerWindow();
+            if (colorPicker.ShowDialog() == true)
+            {
+                var selectedColor = colorPicker.SelectedColor;
+                _mainWindow.Background = new SolidColorBrush(selectedColor);
+                BackgroundColorLabel.Text = selectedColor.ToString();
+                BackgroundColorLabel.Background = new SolidColorBrush(selectedColor);
+            }
+        }
+
+        private void OpacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.Opacity = e.NewValue;
+            OpacityLabel.Text = $"{(int)(e.NewValue * 100)}%";
+        }
+
+        private void Apply_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.InputTextBox.Focus();
+            Close();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void RecordHotKeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            _isRecording = true;
+            RecordHotKeyButton.Content = "🎤 Listening...";
+            RecordHotKeyButton.IsEnabled = false;
+            this.PreviewKeyDown += HotKeyRecorder_PreviewKeyDown;
+            this.PreviewMouseDown += HotKeyRecorder_PreviewMouseDown;
+        }
+
+        private void HotKeyRecorder_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_isRecording) return;
+
+            // Ignore modifier-only keys
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl || 
+                e.Key == Key.LeftAlt || e.Key == Key.RightAlt || 
+                e.Key == Key.LeftShift || e.Key == Key.RightShift || 
+                e.Key == Key.LWin || e.Key == Key.RWin)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            RecordHotKey(e.Key);
+        }
+
+        private void HotKeyRecorder_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!_isRecording) return;
+
+            e.Handled = true;
+            MessageBox.Show("Mouse buttons cannot be used as global hotkeys. Please use a keyboard key with modifiers (e.g., Ctrl+Alt+K).", "Mouse Button Not Supported", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Reset and allow recording again
+            HotKeyTextBlock.Text = "No hotkey recorded";
+            RecordHotKeyButton.IsEnabled = true;
+        }
+
+        private void RecordHotKey(Key key)
+        {
+            _currentModifier = ModifierKeys.None;
+            _currentKey = key;
+
+            // Get the modifiers
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                _currentModifier |= ModifierKeys.Control;
+            if ((Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
+                _currentModifier |= ModifierKeys.Alt;
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                _currentModifier |= ModifierKeys.Shift;
+            if ((Keyboard.Modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
+                _currentModifier |= ModifierKeys.Windows;
+
+            // Display the key combination
+            string keyText = "";
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) keyText += "Ctrl+";
+            if ((Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt) keyText += "Alt+";
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) keyText += "Shift+";
+            if ((Keyboard.Modifiers & ModifierKeys.Windows) == ModifierKeys.Windows) keyText += "Win+";
+            keyText += key.ToString();
+
+            HotKeyTextBlock.Text = keyText;
+
+            // Stop recording
+            StopRecording();
+        }
+
+        private void StopRecording()
+        {
+            _isRecording = false;
+            this.PreviewKeyDown -= HotKeyRecorder_PreviewKeyDown;
+            this.PreviewMouseDown -= HotKeyRecorder_PreviewMouseDown;
+            RecordHotKeyButton.Content = "🎙️ Record Hotkey";
+            RecordHotKeyButton.IsEnabled = true;
+        }
+
+        private void SaveHotKeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Validate that a hotkey was recorded
+            if (_currentKey == Key.None)
+            {
+                MessageBox.Show("Please record a hotkey first by clicking the Record Hotkey button.", "No Hotkey Recorded", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Validate that at least one modifier is selected
+            if (_currentModifier == ModifierKeys.None)
+            {
+                MessageBox.Show("Please select at least one modifier key (Ctrl, Alt, Shift, or Win).", "No Modifier Key", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Prevent invalid keys from being registered
+            if (_currentKey == Key.LWin || _currentKey == Key.RWin || _currentKey == Key.Apps || 
+                _currentKey == Key.BrowserBack || _currentKey == Key.BrowserForward)
+            {
+                MessageBox.Show("This key cannot be used as a global hotkey. Please use a regular keyboard key.", "Invalid Key", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (_mainWindow is MainWindow mainWindow)
+            {
+                bool success = mainWindow.RegisterGlobalHotKey(_currentModifier, _currentKey);
+
+                // Use dispatcher to show feedback asynchronously after a delay
+                // This prevents the hotkey from firing immediately if keys are still pressed
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (success)
+                    {
+                        MessageBox.Show("Hotkey registered successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to register hotkey. It might already be in use.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }), DispatcherPriority.Background);
+            }
+        }
+
+    }
+}

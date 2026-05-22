@@ -1,0 +1,9 @@
+﻿<Window x:Class="TypeFigdet.SettingsButtonWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="" Height="35" Width="35" WindowStyle="None" Background="White" 
+        ShowInTaskbar="False" ResizeMode="NoResize">
+    <Button x:Name="SettingsBtn" Content="⚙" FontSize="16" Background="White" 
+            BorderThickness="1" BorderBrush="LightGray" Click="SettingsBtn_Click" 
+            Foreground="Gray" Cursor="Hand"/>
+</Window>

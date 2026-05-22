@@ -1,0 +1,17 @@
+﻿<Window x:Class="TypeFigdet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TypeFigdet"
+        mc:Ignorable="d"
+        Title="" Height="300" Width="600" WindowStyle="None" Deactivated="Window_Deactivated" ResizeMode="NoResize" ShowInTaskbar="False" Background="White" MouseDown="Window_MouseDown">
+    <Grid> 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="763*"/>
+            <ColumnDefinition Width="37*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="InputTextBox" HorizontalAlignment="Left" Margin="38,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="646" Height="75" FontSize="48" FontFamily="Arial" TextChanged="TextBox_TextChanged_1" BorderThickness="0" Background="Transparent"/>
+
+    </Grid>
+</Window>

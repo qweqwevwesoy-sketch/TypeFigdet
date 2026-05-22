@@ -3,47 +3,180 @@
   "WorkspaceRootPath": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\settingsbuttonwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\settingsbuttonwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\settingswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\settingswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\outsideclickdetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\outsideclickdetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\globalhotkeymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\globalhotkeymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|c:\\users\\gift\\source\\repos\\typefigdet\\typefigdet\\colorpickerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AAF811BE-6EB4-2E9C-DA98-EA9C79C0DB38}|TypeFigdet\\TypeFigdet.csproj|solutionrelative:typefigdet\\colorpickerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
     {
-      "Orientation": 0,
+      "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "DockedHeight": 115,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SettingsWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsWindow.xaml.cs",
+              "RelativeDocumentMoniker": "TypeFigdet\\SettingsWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsWindow.xaml.cs",
+              "RelativeToolTip": "TypeFigdet\\SettingsWindow.xaml.cs",
+              "ViewState": "AgIAAGABAAAAAAAAAAAiwGMBAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T05:35:33.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SettingsWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsWindow.xaml",
+              "RelativeDocumentMoniker": "TypeFigdet\\SettingsWindow.xaml",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsWindow.xaml",
+              "RelativeToolTip": "TypeFigdet\\SettingsWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-21T05:35:22.644Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "TypeFigdet\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\MainWindow.xaml.cs",
+              "RelativeToolTip": "TypeFigdet\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAL0AAAAAAAAAAAAAwMYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T05:34:51.188Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\App.xaml",
+              "RelativeDocumentMoniker": "TypeFigdet\\App.xaml",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\App.xaml",
+              "RelativeToolTip": "TypeFigdet\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-21T05:27:41.747Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "SettingsButtonWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsButtonWindow.xaml.cs",
+              "RelativeDocumentMoniker": "TypeFigdet\\SettingsButtonWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsButtonWindow.xaml.cs",
+              "RelativeToolTip": "TypeFigdet\\SettingsButtonWindow.xaml.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAwCAAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-22T12:39:21.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GlobalHotKeyManager.cs",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\GlobalHotKeyManager.cs",
+              "RelativeDocumentMoniker": "TypeFigdet\\GlobalHotKeyManager.cs",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\GlobalHotKeyManager.cs",
+              "RelativeToolTip": "TypeFigdet\\GlobalHotKeyManager.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAowAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T05:48:22.621Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\MainWindow.xaml",
               "RelativeDocumentMoniker": "TypeFigdet\\MainWindow.xaml",
               "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\MainWindow.xaml",
               "RelativeToolTip": "TypeFigdet\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-05T03:41:06.652Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-21T05:27:48.19Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "TypeFigdet\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\MainWindow.xaml.cs",
-              "RelativeToolTip": "TypeFigdet\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "OutsideClickDetector.cs",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\OutsideClickDetector.cs",
+              "RelativeDocumentMoniker": "TypeFigdet\\OutsideClickDetector.cs",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\OutsideClickDetector.cs",
+              "RelativeToolTip": "TypeFigdet\\OutsideClickDetector.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T03:41:04.303Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-21T05:48:13.364Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ColorPickerWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\ColorPickerWindow.xaml.cs",
+              "RelativeDocumentMoniker": "TypeFigdet\\ColorPickerWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\ColorPickerWindow.xaml.cs",
+              "RelativeToolTip": "TypeFigdet\\ColorPickerWindow.xaml.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAtwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T05:40:55.718Z"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 285,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 482,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
             }
           ]
         }

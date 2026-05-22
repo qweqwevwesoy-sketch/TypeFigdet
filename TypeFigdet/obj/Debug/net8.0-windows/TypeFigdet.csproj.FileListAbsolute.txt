@@ -18,3 +18,10 @@ C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\refint
 C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\TypeFigdet.pdb
 C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\TypeFigdet.genruntimeconfig.cache
 C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\ref\TypeFigdet.dll
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\TypeFigdet.sourcelink.json
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\SettingsWindow.baml
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\SettingsWindow.g.cs
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\ColorPickerWindow.baml
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\ColorPickerWindow.g.cs
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\SettingsButtonWindow.baml
+C:\Users\Gift\source\repos\TypeFigdet\TypeFigdet\obj\Debug\net8.0-windows\SettingsButtonWindow.g.cs

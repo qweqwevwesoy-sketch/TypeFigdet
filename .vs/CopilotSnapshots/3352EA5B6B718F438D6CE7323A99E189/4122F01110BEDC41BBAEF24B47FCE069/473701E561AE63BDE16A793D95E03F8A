@@ -1,0 +1,131 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for SettingsWindow.xaml
+    /// </summary>
+    public partial class SettingsWindow : Window
+    {
+        private MainWindow _mainWindow;
+
+        public SettingsWindow(MainWindow mainWindow)
+        {
+            InitializeComponent();
+            _mainWindow = mainWindow;
+            InitializeSettings();
+        }
+
+        private void InitializeSettings()
+        {
+            // Populate font families
+            foreach (var family in Fonts.SystemFontFamilies)
+            {
+                FontFamilyComboBox.Items.Add(family.Source);
+            }
+            FontFamilyComboBox.SelectedItem = _mainWindow.InputTextBox.FontFamily.Source;
+            FontFamilyComboBox.SelectionChanged += FontFamilyComboBox_SelectionChanged;
+
+            // Font size
+            FontSizeSlider.Value = _mainWindow.InputTextBox.FontSize;
+            FontSizeSlider.ValueChanged += FontSizeSlider_ValueChanged;
+            FontSizeLabel.Text = $"{(int)FontSizeSlider.Value} pt";
+
+            // Font color
+            var fontColor = (_mainWindow.InputTextBox.Foreground as SolidColorBrush)?.Color ?? Colors.Black;
+            ColorLabel.Text = fontColor.ToString();
+            ColorLabel.Background = new SolidColorBrush(fontColor);
+
+            // Window size
+            WindowWidthSlider.Value = _mainWindow.Width;
+            WindowWidthSlider.ValueChanged += WindowWidthSlider_ValueChanged;
+            WindowWidthLabel.Text = $"{(int)WindowWidthSlider.Value}";
+
+            WindowHeightSlider.Value = _mainWindow.Height;
+            WindowHeightSlider.ValueChanged += WindowHeightSlider_ValueChanged;
+            WindowHeightLabel.Text = $"{(int)WindowHeightSlider.Value}";
+
+            // Background color
+            var bgColor = (_mainWindow.Background as SolidColorBrush)?.Color ?? Colors.White;
+            BackgroundColorLabel.Text = bgColor.ToString();
+            BackgroundColorLabel.Background = new SolidColorBrush(bgColor);
+
+            // Opacity
+            OpacitySlider.Value = _mainWindow.Opacity;
+            OpacitySlider.ValueChanged += OpacitySlider_ValueChanged;
+            OpacityLabel.Text = $"{(int)(OpacitySlider.Value * 100)}%";
+        }
+
+        private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (FontFamilyComboBox.SelectedItem != null)
+            {
+                _mainWindow.InputTextBox.FontFamily = new FontFamily(FontFamilyComboBox.SelectedItem.ToString());
+            }
+        }
+
+        private void FontSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.InputTextBox.FontSize = e.NewValue;
+            FontSizeLabel.Text = $"{(int)e.NewValue} pt";
+        }
+
+        private void ColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var colorPicker = new ColorPickerWindow();
+            if (colorPicker.ShowDialog() == true)
+            {
+                var selectedColor = colorPicker.SelectedColor;
+                _mainWindow.InputTextBox.Foreground = new SolidColorBrush(selectedColor);
+                ColorLabel.Text = selectedColor.ToString();
+                ColorLabel.Background = new SolidColorBrush(selectedColor);
+            }
+        }
+
+        private void WindowWidthSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.Width = e.NewValue;
+            WindowWidthLabel.Text = $"{(int)e.NewValue}";
+        }
+
+        private void WindowHeightSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.Height = e.NewValue;
+            WindowHeightLabel.Text = $"{(int)e.NewValue}";
+        }
+
+        private void BackgroundColorPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var colorPicker = new ColorPickerWindow();
+            if (colorPicker.ShowDialog() == true)
+            {
+                var selectedColor = colorPicker.SelectedColor;
+                _mainWindow.Background = new SolidColorBrush(selectedColor);
+                BackgroundColorLabel.Text = selectedColor.ToString();
+                BackgroundColorLabel.Background = new SolidColorBrush(selectedColor);
+            }
+        }
+
+        private void OpacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _mainWindow.Opacity = e.NewValue;
+            OpacityLabel.Text = $"{(int)(e.NewValue * 100)}%";
+        }
+
+        private void Apply_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.InputTextBox.Focus();
+            Close();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+
+    }
+}

@@ -1,0 +1,143 @@
+<Window x:Class="TypeFigdet.ColorPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pick Color" Height="550" Width="480" 
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
+        Background="#F0F0F0">
+
+    <Window.Resources>
+        <!-- Modern button style for presets -->
+        <Style x:Key="PresetColorButton" TargetType="Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="6" ShadowDepth="2" Opacity="0.5"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Slider style -->
+        <Style TargetType="Slider">
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="IsSnapToTickEnabled" Value="False"/>
+            <Setter Property="TickFrequency" Value="1"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="🎨 Select a Color" FontSize="16" FontWeight="SemiBold" 
+                   Margin="0,0,0,12" Foreground="#2C3E50"/>
+
+        <!-- Color Preview -->
+        <Border Grid.Row="1" Height="50" CornerRadius="8" Margin="0,0,0,15" 
+                BorderBrush="#CCCCCC" BorderThickness="1" Background="White">
+            <Border x:Name="ColorPreviewBorder" Background="Black" CornerRadius="7" Margin="2">
+                <TextBlock x:Name="PreviewText" Text="Current Color" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White" FontWeight="SemiBold" />
+            </Border>
+        </Border>
+
+        <!-- RGB Sliders -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,12">
+            <TextBlock Text="RGB Custom" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+            <!-- Red -->
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+                <TextBlock Text="R:" Width="25" VerticalAlignment="Center" Foreground="#E74C3C"/>
+                <Slider x:Name="RedSlider" Minimum="0" Maximum="255" Value="0" 
+                        Background="#E74C3C" Width="250"/>
+                <TextBox x:Name="RedBox" Text="0" Width="40" Margin="8,0,0,0" TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Green -->
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+                <TextBlock Text="G:" Width="25" VerticalAlignment="Center" Foreground="#2ECC71"/>
+                <Slider x:Name="GreenSlider" Minimum="0" Maximum="255" Value="0" 
+                        Background="#2ECC71" Width="250"/>
+                <TextBox x:Name="GreenBox" Text="0" Width="40" Margin="8,0,0,0" TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Blue -->
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+                <TextBlock Text="B:" Width="25" VerticalAlignment="Center" Foreground="#3498DB"/>
+                <Slider x:Name="BlueSlider" Minimum="0" Maximum="255" Value="0" 
+                        Background="#3498DB" Width="250"/>
+                <TextBox x:Name="BlueBox" Text="0" Width="40" Margin="8,0,0,0" TextAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Hex Input -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,15">
+            <TextBlock Text="Hex:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
+            <TextBox x:Name="HexBox" Text="#000000" Width="100" FontFamily="Consolas"
+                     MaxLength="7" CharacterCasing="Upper"/>
+            <TextBlock Text="(e.g., #FF5722)" Margin="10,0,0,0" Foreground="Gray" FontSize="11" 
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Preset Colors -->
+        <StackPanel Grid.Row="4" Margin="0,0,0,12">
+            <TextBlock Text="Preset Palette" FontWeight="SemiBold" Margin="0,0,0,8"/>
+            <WrapPanel x:Name="PresetPanel" HorizontalAlignment="Stretch"/>
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="OK" Width="80" Height="32" Margin="0,0,8,0" Click="OK_Click"
+                    Background="#007ACC" Foreground="White" BorderThickness="0" 
+                    Cursor="Hand" FontWeight="SemiBold">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.3"/>
+                </Button.Effect>
+            </Button>
+            <Button Content="Cancel" Width="80" Height="32" Click="Cancel_Click"
+                    Background="#E74C3C" Foreground="White" BorderThickness="0" 
+                    Cursor="Hand" FontWeight="SemiBold">
+                <Button.Effect>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.3"/>
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+
+        <!-- Status -->
+        <TextBlock Grid.Row="6" x:Name="StatusText" Text="Selected: Black" 
+                   Margin="0,12,0,0" FontSize="11" Foreground="Gray"/>
+    </Grid>
+</Window>

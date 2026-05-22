@@ -1,0 +1,52 @@
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation; 
+using System.Windows.Shapes;
+using System.Windows.Threading;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private DispatcherTimer _clearTimer;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            InitializeClearTimer();
+        }
+
+        private void InitializeClearTimer()
+        {
+            _clearTimer = new DispatcherTimer();
+            _clearTimer.Interval = TimeSpan.FromSeconds(1);
+            _clearTimer.Tick += (s, e) => ClearTextBox();
+        }
+
+        private void ClearTextBox()
+        {
+            InputTextBox.Clear();
+            _clearTimer.Stop();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            _clearTimer.Stop();
+            _clearTimer.Start();
+        }
+    }
+}

@@ -1,0 +1,40 @@
+﻿using System.Windows;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for SettingsButtonWindow.xaml
+    /// </summary>
+    public partial class SettingsButtonWindow : Window
+    {
+        private MainWindow _mainWindow;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        public SettingsButtonWindow(MainWindow mainWindow)
+        {
+            InitializeComponent();
+            _mainWindow = mainWindow;
+
+            // Position at top-left corner
+            Left = 5;
+            Top = 5;
+
+            Deactivated += SettingsButtonWindow_Deactivated;
+        }
+
+        private void SettingsButtonWindow_Deactivated(object sender, EventArgs e)
+        {
+            // Close the settings button if focus moved away
+            Close();
+        }
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.OpenSettings();
+        }
+    }
+}

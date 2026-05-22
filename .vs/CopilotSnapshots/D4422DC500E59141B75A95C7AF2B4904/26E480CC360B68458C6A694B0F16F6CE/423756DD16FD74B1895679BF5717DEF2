@@ -1,0 +1,114 @@
+﻿using System.Windows;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+using System.Windows.Input;
+using System.Windows.Threading;
+using System;
+
+namespace TypeFigdet
+{
+    internal class GlobalHotKeyManager
+    {
+        private const int WM_HOTKEY = 0x0312;
+        private int _hotKeyId = 9000;
+        private IntPtr _windowHandle;
+        private HwndSource _hwndSource;
+        private Action _onHotKeyPressed;
+        private ModifierKeys _currentModifier;
+        private Key _currentKey;
+        private DateTime _lastRegistrationTime = DateTime.MinValue;
+        private const int HOTKEY_GRACE_PERIOD_MS = 500; // Ignore hotkey for 500ms after registration
+
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        [DllImport("kernel32.dll")]
+        private static extern uint GetLastError();
+
+        private const uint MOD_NONE = 0x0000;
+        private const uint MOD_ALT = 0x0001;
+        private const uint MOD_CONTROL = 0x0002;
+        private const uint MOD_SHIFT = 0x0004;
+        private const uint MOD_WIN = 0x0008;
+
+        public GlobalHotKeyManager(Window window)
+        {
+            _windowHandle = new WindowInteropHelper(window).Handle;
+        }
+
+        public bool RegisterHotKey(ModifierKeys modifier, Key key, Action onHotKeyPressed)
+        {
+            _currentModifier = modifier;
+            _currentKey = key;
+            _onHotKeyPressed = onHotKeyPressed;
+            _lastRegistrationTime = DateTime.UtcNow;
+
+            if (_hwndSource == null)
+            {
+                _hwndSource = HwndSource.FromHwnd(_windowHandle);
+                if (_hwndSource != null)
+                {
+                    _hwndSource.AddHook(HotKeyHook);
+                }
+                else
+                {
+                    MessageBox.Show("Failed to create HwndSource. Window handle may be invalid.");
+                    return false;
+                }
+            }
+
+            uint modifiers = 0;
+            if ((modifier & ModifierKeys.Alt) == ModifierKeys.Alt) modifiers |= MOD_ALT;
+            if ((modifier & ModifierKeys.Control) == ModifierKeys.Control) modifiers |= MOD_CONTROL;
+            if ((modifier & ModifierKeys.Shift) == ModifierKeys.Shift) modifiers |= MOD_SHIFT;
+            if ((modifier & ModifierKeys.Windows) == ModifierKeys.Windows) modifiers |= MOD_WIN;
+
+            uint keyCode = (uint)KeyInterop.VirtualKeyFromKey(key);
+
+            bool success = RegisterHotKey(_windowHandle, _hotKeyId, modifiers, keyCode);
+
+            if (!success)
+            {
+                uint error = GetLastError();
+                MessageBox.Show($"Failed to register hotkey. Error code: {error}");
+            }
+
+            return success;
+        }
+
+        public void UnregisterHotKey()
+        {
+            if (_windowHandle != IntPtr.Zero)
+            {
+                UnregisterHotKey(_windowHandle, _hotKeyId);
+            }
+
+            if (_hwndSource != null)
+            {
+                _hwndSource.RemoveHook(HotKeyHook);
+                _hwndSource.Dispose();
+                _hwndSource = null;
+            }
+        }
+
+        private IntPtr HotKeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WM_HOTKEY)
+            {
+                // Ignore hotkey trigger if within grace period of registration to prevent accidental triggers
+                if ((DateTime.UtcNow - _lastRegistrationTime).TotalMilliseconds < HOTKEY_GRACE_PERIOD_MS)
+                {
+                    handled = true;
+                    return IntPtr.Zero;
+                }
+
+                _onHotKeyPressed?.Invoke();
+                handled = true;
+            }
+            return IntPtr.Zero;
+        }
+    }
+}

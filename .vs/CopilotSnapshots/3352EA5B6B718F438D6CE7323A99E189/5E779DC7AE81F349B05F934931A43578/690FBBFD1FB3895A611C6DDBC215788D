@@ -1,0 +1,177 @@
+﻿using System.Configuration;
+using System.Data;
+using System.Windows;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        private IntPtr _hookHandle = IntPtr.Zero;
+        private LowLevelMouseHook _mouseHook;
+        private List<Window> _appWindows = new List<Window>();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelMouseHook.LowLevelMouseProc lpfn, IntPtr hMod, uint dwThreadId);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsChild(IntPtr hWndParent, IntPtr hWnd);
+
+        private const int WH_MOUSE_LL = 14;
+        private const int WM_LBUTTONDOWN = 0x0201;
+
+        public App()
+        {
+            _mouseHook = new LowLevelMouseHook(this);
+            InstallMouseHook();
+        }
+
+        public void RegisterWindow(Window window)
+        {
+            if (!_appWindows.Contains(window))
+            {
+                _appWindows.Add(window);
+            }
+        }
+
+        public void UnregisterWindow(Window window)
+        {
+            _appWindows.Remove(window);
+        }
+
+        private void InstallMouseHook()
+        {
+            try
+            {
+                IntPtr moduleHandle = GetModuleHandle(null);
+                _hookHandle = SetWindowsHookEx(WH_MOUSE_LL, _mouseHook.HookProc, moduleHandle, 0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to install mouse hook: {ex.Message}");
+            }
+        }
+
+        public void UninstallMouseHook()
+        {
+            if (_hookHandle != IntPtr.Zero)
+            {
+                UnhookWindowsHookEx(_hookHandle);
+                _hookHandle = IntPtr.Zero;
+            }
+        }
+
+        public void CloseAllWindows()
+        {
+            for (int i = _appWindows.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    _appWindows[i].Close();
+                }
+                catch { }
+            }
+        }
+
+        public bool IsClickOnAppWindow(IntPtr windowHandle)
+        {
+            foreach (var window in _appWindows)
+            {
+                if (!window.IsLoaded) continue;
+
+                IntPtr windowPtr = new System.Windows.Interop.WindowInteropHelper(window).Handle;
+                if (windowHandle == windowPtr)
+                {
+                    return true;
+                }
+
+                // Also check if it's a child of any app window
+                if (IsChild(windowPtr, windowHandle))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            UninstallMouseHook();
+            base.OnExit(e);
+        }
+    }
+
+    // Separate class to hold the mouse hook delegate (needs to persist)
+    internal class LowLevelMouseHook
+    {
+        private App _app;
+        public delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
+        public LowLevelMouseProc HookProc { get; }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(System.Drawing.Point pt);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MSLLHOOKSTRUCT
+        {
+            public System.Drawing.Point pt;
+            public uint mouseData;
+            public uint flags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
+
+        private const int WM_LBUTTONDOWN = 0x0201;
+
+        public LowLevelMouseHook(App app)
+        {
+            _app = app;
+            HookProc = new LowLevelMouseProc(MouseHookCallback);
+        }
+
+        private IntPtr MouseHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && wParam == (IntPtr)WM_LBUTTONDOWN)
+            {
+                try
+                {
+                    MSLLHOOKSTRUCT hookStruct = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
+                    IntPtr clickedWindow = WindowFromPoint(hookStruct.pt);
+
+                    // Check if click is outside app windows
+                    if (!_app.IsClickOnAppWindow(clickedWindow))
+                    {
+                        // Delay closing slightly to allow button clicks to process
+                        var timer = new System.Windows.Threading.DispatcherTimer();
+                        timer.Interval = System.TimeSpan.FromMilliseconds(100);
+                        timer.Tick += (s, e) =>
+                        {
+                            timer.Stop();
+                            _app.CloseAllWindows();
+                        };
+                        timer.Start();
+                    }
+                }
+                catch { }
+            }
+
+            return CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+        }
+    }
+}

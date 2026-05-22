@@ -1,0 +1,80 @@
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation; 
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private DispatcherTimer _clearTimer;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        [DllImport("user32.dll")]
+        private static extern bool RemoveMenu(IntPtr hMenu, uint uPosition, uint uFlags);
+
+        private const uint MF_BYCOMMAND = 0x00000000;
+        private const uint SC_CLOSE = 0xF060;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            InitializeClearTimer();
+            Loaded += (s, e) => 
+            {
+                InputTextBox.Focus();
+                RemoveCloseButton();
+            };
+        }
+
+        private void RemoveCloseButton()
+        {
+            IntPtr hwnd = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            IntPtr hMenu = GetSystemMenu(hwnd, false);
+            RemoveMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+        }
+
+        private void InitializeClearTimer()
+        {
+            _clearTimer = new DispatcherTimer();
+            _clearTimer.Interval = TimeSpan.FromSeconds(0.5);
+            _clearTimer.Tick += (s, e) => ClearTextBox();
+        }
+
+        private void ClearTextBox()
+        {
+            InputTextBox.Clear();
+            _clearTimer.Stop();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            _clearTimer.Stop();
+            _clearTimer.Start();
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            Close();
+        }
+    }
+}

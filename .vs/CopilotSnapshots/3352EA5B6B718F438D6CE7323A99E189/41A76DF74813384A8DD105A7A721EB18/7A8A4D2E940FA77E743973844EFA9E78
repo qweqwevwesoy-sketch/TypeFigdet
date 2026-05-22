@@ -1,0 +1,56 @@
+﻿using System.Windows;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+
+namespace TypeFigdet
+{
+    /// <summary>
+    /// Interaction logic for SettingsButtonWindow.xaml
+    /// </summary>
+    public partial class SettingsButtonWindow : Window
+    {
+        private MainWindow _mainWindow;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        public SettingsButtonWindow(MainWindow mainWindow)
+        {
+            InitializeComponent();
+            _mainWindow = mainWindow;
+
+            // Position at top-left corner
+            Left = 5;
+            Top = 5;
+
+            Deactivated += SettingsButtonWindow_Deactivated;
+        }
+
+        private void SettingsButtonWindow_Deactivated(object sender, EventArgs e)
+        {
+            var timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Interval = System.TimeSpan.FromMilliseconds(50);
+            timer.Tick += (s, args) =>
+            {
+                timer.Stop();
+                IntPtr foregroundWindow = GetForegroundWindow();
+                IntPtr thisWindowHandle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+                IntPtr mainWindowHandle = new System.Windows.Interop.WindowInteropHelper(_mainWindow).Handle;
+
+                // Only close if focus is not on any TypeFigdet window
+                if (foregroundWindow != thisWindowHandle && foregroundWindow != mainWindowHandle)
+                {
+                    Close();
+                }
+            };
+            timer.Start();
+        }
+
+        private System.Windows.Threading.DispatcherTimer _hideTimer;
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.OpenSettings();
+        }
+    }
+}

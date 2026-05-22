@@ -1,0 +1,197 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+
+namespace TypeFigdet
+{
+    public partial class ColorPickerWindow : Window
+    {
+        public Color SelectedColor { get; set; } = Colors.Black;
+
+        private bool _isUpdating = false; // Prevent circular updates
+
+        // Modern preset colors (brand, material, and classic colors)
+        private readonly List<Color> _presetColors = new List<Color>
+        {
+            Colors.Black, Colors.DimGray, Colors.Gray, Colors.LightGray, Colors.White,
+            Colors.Red, Colors.Crimson, Colors.OrangeRed, Colors.Orange, Colors.Gold,
+            Colors.Yellow, Colors.YellowGreen, Colors.LimeGreen, Colors.Green, Colors.SeaGreen,
+            Colors.Cyan, Colors.Turquoise, Colors.DodgerBlue, Colors.RoyalBlue, Colors.Blue,
+            Colors.Indigo, Colors.Purple, Colors.Magenta, Colors.HotPink, Colors.DeepPink,
+            Colors.Tomato, Colors.Salmon, Colors.Coral, Colors.Khaki, Colors.Lavender
+        };
+
+        public ColorPickerWindow()
+        {
+            InitializeComponent();
+            Loaded += OnLoaded;
+            Closed += (s, e) =>
+            {
+                // Unregister when closed
+                if (Application.Current is App app)
+                {
+                    app.UnregisterWindow(this);
+                }
+            };
+
+            // Attach event handlers
+            RedSlider.ValueChanged += Slider_ValueChanged;
+            GreenSlider.ValueChanged += Slider_ValueChanged;
+            BlueSlider.ValueChanged += Slider_ValueChanged;
+            RedBox.TextChanged += NumericBox_TextChanged;
+            GreenBox.TextChanged += NumericBox_TextChanged;
+            BlueBox.TextChanged += NumericBox_TextChanged;
+            HexBox.TextChanged += HexBox_TextChanged;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // Register this window with the app
+            if (Application.Current is App app)
+            {
+                app.RegisterWindow(this);
+            }
+
+            BuildPresetPalette();
+            UpdateColorControls(SelectedColor);
+        }
+
+        private void BuildPresetPalette()
+        {
+            PresetPanel.Children.Clear();
+            foreach (var color in _presetColors)
+            {
+                var btn = new Button
+                {
+                    Style = (Style)FindResource("PresetColorButton"),
+                    Background = new SolidColorBrush(color),
+                    Tag = color,
+                    ToolTip = GetColorName(color)
+                };
+                btn.Click += PresetColor_Click;
+                PresetPanel.Children.Add(btn);
+            }
+        }
+
+        private string GetColorName(Color color)
+        {
+            // Try to get known color name, fallback to RGB
+            var prop = typeof(Colors).GetProperties()
+                .FirstOrDefault(p => (Color)p.GetValue(null) == color);
+            return prop != null ? prop.Name : $"RGB({color.R},{color.G},{color.B})";
+        }
+
+        private void PresetColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is Color color)
+            {
+                SelectedColor = color;
+                UpdateColorControls(SelectedColor);
+                StatusText.Text = $"Selected: {GetColorName(color)}";
+            }
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_isUpdating) return;
+            _isUpdating = true;
+
+            SelectedColor = Color.FromRgb(
+                (byte)RedSlider.Value,
+                (byte)GreenSlider.Value,
+                (byte)BlueSlider.Value
+            );
+            UpdateColorFromRGB(SelectedColor);
+
+            _isUpdating = false;
+        }
+
+        private void NumericBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isUpdating) return;
+            _isUpdating = true;
+
+            try
+            {
+                byte r = byte.TryParse(RedBox.Text, out byte rv) ? rv : (byte)0;
+                byte g = byte.TryParse(GreenBox.Text, out byte gv) ? gv : (byte)0;
+                byte b = byte.TryParse(BlueBox.Text, out byte bv) ? bv : (byte)0;
+
+                SelectedColor = Color.FromRgb(r, g, b);
+                UpdateColorFromRGB(SelectedColor);
+            }
+            catch { /* Ignore invalid input */ }
+
+            _isUpdating = false;
+        }
+
+        private void HexBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isUpdating) return;
+            _isUpdating = true;
+
+            try
+            {
+                var hex = HexBox.Text.TrimStart('#');
+                if (hex.Length == 6 && int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int intValue))
+                {
+                    byte r = (byte)((intValue >> 16) & 0xFF);
+                    byte g = (byte)((intValue >> 8) & 0xFF);
+                    byte b = (byte)(intValue & 0xFF);
+                    SelectedColor = Color.FromRgb(r, g, b);
+                    UpdateColorFromRGB(SelectedColor);
+                }
+            }
+            catch { /* Invalid hex, ignore */ }
+
+            _isUpdating = false;
+        }
+
+        private void UpdateColorControls(Color color)
+        {
+            _isUpdating = true;
+
+            // Update sliders and text boxes
+            RedSlider.Value = color.R;
+            GreenSlider.Value = color.G;
+            BlueSlider.Value = color.B;
+            RedBox.Text = color.R.ToString();
+            GreenBox.Text = color.G.ToString();
+            BlueBox.Text = color.B.ToString();
+
+            // Update hex
+            HexBox.Text = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+
+            // Update preview
+            ColorPreviewBorder.Background = new SolidColorBrush(color);
+
+            // Adjust preview text color for visibility
+            var luminance = (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255;
+            PreviewText.Foreground = luminance > 0.5 ? Brushes.Black : Brushes.White;
+            PreviewText.Text = $"RGB({color.R},{color.G},{color.B})";
+
+            _isUpdating = false;
+        }
+
+        private void UpdateColorFromRGB(Color color)
+        {
+            UpdateColorControls(color);
+            StatusText.Text = $"Selected: RGB({color.R},{color.G},{color.B})";
+        }
+
+        private void OK_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+    }
+}

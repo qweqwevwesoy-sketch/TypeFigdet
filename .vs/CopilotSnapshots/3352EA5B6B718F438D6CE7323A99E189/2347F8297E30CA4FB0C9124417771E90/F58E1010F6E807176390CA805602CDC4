@@ -1,0 +1,119 @@
+﻿using System.Windows;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+
+namespace TypeFigdet
+{
+    internal static class OutsideClickDetector
+    {
+        private static Action _onOutsideClick;
+        private static IntPtr _hookHandle = IntPtr.Zero;
+        private static LowLevelMouseHookDelegate _hookDelegate;
+
+        private const int WH_MOUSE_LL = 14;
+        private const int WM_LBUTTONDOWN = 0x0201;
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelMouseHookDelegate lpfn, IntPtr hMod, uint dwThreadId);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(System.Drawing.Point pt);
+
+        private delegate IntPtr LowLevelMouseHookDelegate(int nCode, IntPtr wParam, IntPtr lParam);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MSLLHOOKSTRUCT
+        {
+            public System.Drawing.Point pt;
+            public uint mouseData;
+            public uint flags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
+
+        public static void Install(Action onOutsideClick)
+        {
+            if (_hookHandle != IntPtr.Zero)
+                return;
+
+            _onOutsideClick = onOutsideClick;
+            _hookDelegate = new LowLevelMouseHookDelegate(MouseHookCallback);
+
+            try
+            {
+                IntPtr moduleHandle = GetModuleHandle(null);
+                _hookHandle = SetWindowsHookEx(WH_MOUSE_LL, _hookDelegate, moduleHandle, 0);
+            }
+            catch
+            {
+                _hookHandle = IntPtr.Zero;
+            }
+        }
+
+        public static void Uninstall()
+        {
+            if (_hookHandle != IntPtr.Zero)
+            {
+                UnhookWindowsHookEx(_hookHandle);
+                _hookHandle = IntPtr.Zero;
+            }
+        }
+
+        private static IntPtr MouseHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && wParam == (IntPtr)WM_LBUTTONDOWN && _onOutsideClick != null)
+            {
+                try
+                {
+                    MSLLHOOKSTRUCT hookStruct = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
+                    IntPtr clickedWindow = WindowFromPoint(hookStruct.pt);
+
+                    // Check if any app window contains this click
+                    bool isAppWindow = false;
+                    if (Application.Current is App app)
+                    {
+                        foreach (var window in app.GetAppWindows())
+                        {
+                            if (!window.IsLoaded) continue;
+
+                            IntPtr windowPtr = new WindowInteropHelper(window).Handle;
+                            if (clickedWindow == windowPtr)
+                            {
+                                isAppWindow = true;
+                                break;
+                            }
+
+                            // Check child windows
+                            if (IsChild(windowPtr, clickedWindow))
+                            {
+                                isAppWindow = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // If click is outside app, trigger callback
+                    if (!isAppWindow)
+                    {
+                        _onOutsideClick?.Invoke();
+                    }
+                }
+                catch { }
+            }
+
+            return CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool IsChild(IntPtr hWndParent, IntPtr hWnd);
+    }
+}
