@@ -45,7 +45,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 115,
+          "DockedHeight": 254,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -56,7 +56,7 @@
               "RelativeDocumentMoniker": "TypeFigdet\\SettingsWindow.xaml.cs",
               "ToolTip": "C:\\Users\\Gift\\source\\repos\\TypeFigdet\\TypeFigdet\\SettingsWindow.xaml.cs",
               "RelativeToolTip": "TypeFigdet\\SettingsWindow.xaml.cs",
-              "ViewState": "AgIAAGABAAAAAAAAAAAiwGMBAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAGABAAAAAAAAAAAiwGMBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-21T05:35:33.668Z",
               "EditorCaption": ""
@@ -157,7 +157,7 @@
           ]
         },
         {
-          "DockedHeight": 285,
+          "DockedHeight": 146,
           "SelectedChildIndex": -1,
           "Children": [
             {
